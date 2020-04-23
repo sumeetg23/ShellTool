@@ -100,7 +100,7 @@ echo "Extension: $fileext" >>$outdir/log_file.txt;
 
 #bowtie commands, arguments
 unqstr="${jobid}align"
-bsub -o $outdir/AlignJob-%J.txt -J $unqstr "STAR --outSAMtype BAM SortedByCoordinate --genomeDir $star_index --runThreadN 4 --outFilterMultimapNmax 1 --outFilterMismatchNoverLmax 0.04 --outFilterIntronMotifs RemoveNoncanonicalUnannotated --outSJfilterReads Unique --readFilesIn $read1fastq --readFilesCommand zcat --outFileNamePrefix $outdir/${filename}_ > $outdir/${filename}.starout"
+bsub -o $outdir/AlignJob-%J.txt -J $unqstr "STAR --outSAMtype BAM SortedByCoordinate --genomeDir $star_index --runThreadN 4 --outFilterMultimapNmax 1 --outFilterIntronMotifs RemoveNoncanonicalUnannotated --outSJfilterReads Unique --readFilesIn $read1fastq --readFilesCommand zcat --outFileNamePrefix $outdir/${filename}_ > $outdir/${filename}.starout"
 
 #index the bam file
 idtrack=$unqstr
@@ -110,7 +110,7 @@ bsub -o $outdir/IndexJob-%J.txt -w $idtrack -J $unqstr "samtools index $outdir/$
 #computes expression
 idtrack=$unqstr
 unqstr="${jobid}fccount"
-bsub -o $outdir/FCCountJob-%J.txt -w $idtrack -J $unqstr "featureCounts -T 10 -s 1 -f -a $gtf_file -o $outdir/${filename}_featureCounts.count $outdir/${filename}_Aligned.sortedByCoord.out.bam"
+bsub -o $outdir/FCCountJob-%J.txt -w $idtrack -J $unqstr "featureCounts -s 0 -a $gtf_file -o $outdir/${filename}_featureCounts.count $outdir/${filename}_Aligned.sortedByCoord.out.bam"
 
 unqstr="${jobid}htseqcount"
 bsub -o $outdir/htseqCountJob-%J.txt -w $idtrack -J $unqstr "htseq-count -m union -f bam -s $stranded $outdir/${filename}_Aligned.sortedByCoord.out.bam $gtf_file  > $outdir/${filename}_HTSeqCounts.count"
