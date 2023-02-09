@@ -7,6 +7,8 @@
 # - samtools
 # Currently supports only single end rna-seq reads
 
+# works on LSF cluster
+
 set -e
 set -u
 set -o pipefail
